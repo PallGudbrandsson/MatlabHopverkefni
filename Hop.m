@@ -9,19 +9,62 @@ clc
 Mappa = {};
 y = [];
 
-pwd = strcat(pwd, '\MatlabHopverkefni\');
-mappa = strcat(pwd, '\Data\')
-Mappa= dir(strcat(mappa))
+pwd = strcat(pwd, '\MatlabHopverkefni');
+mappa = strcat(pwd, '\Data\');
+Mappa= dir(mappa);
+Gogn = [];
 
-% C:\Users\Palli\Documents\MATLAB\Heilbrigðir\
-for i = 1:length(Mappa)
+for i = 3:length(Mappa)
     try
         % held tad turfi ekki ad hafa try catch en atla ekki ad taka strax
         y{i} = dir(strcat(mappa,char(Mappa(i).name), '\*.dat'));
-        dir(strcat(mappa,char(Mappa(i).name), '\*.dat'))
-    catch me
-        disp('error');
+        for a = 1:length(y{i}.name)
+            gogn = load(strcat(mappa,Mappa(i).name,'\',char(y{i}(a).name)));
+        end
+     catch me         
+         disp('error');
         % ef hingad er komid er Mappa(i).name ekki gilt skraar nafn. Geri
         % tetta tvi i minum prufum var vesen med nofnin
     end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
