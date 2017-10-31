@@ -1,7 +1,12 @@
-% Pall gudbrandsson og co
+% Pall gudbrandsson
+% Lelíta Rós Ycot
+% Ragnhildur Guðmundsdóttir
+% Kolbrún Dóra Magnúsdóttir
+% Þorbjörg Katrín Davíðsdóttir
+
 % hopverkefni 2017
 
-%% damid
+%%
 close all
 clear all
 clc
@@ -12,23 +17,42 @@ y = [];
 pwd = strcat(pwd, '\MatlabHopverkefni');
 mappa = strcat(pwd, '\Data\');
 Mappa= dir(mappa);
-Gogn = [];
+GognMann = [];
+GognFluga = [];
 
-for i = 3:length(Mappa)
-    'fle'
-    %try
-        % held tad turfi ekki ad hafa try catch en atla ekki ad taka strax
-        y = dir(strcat(mappa,char(Mappa(i).name), '\*.dat'));
-        for a = 1:length((y{i}.name))
-            gogn = load(strcat(mappa,Mappa(i).name,'\',char(y{i}(a).name)));
+for i = 1:length(Mappa)
+    try
+        y = dir(strcat(mappa,char(Mappa(i).name), '/*.dat'));
+        for a = 1:6
+            gogn = load(strcat(mappa,Mappa(i).name,'\',char(y(a).name)));
+            GognMann{end+1} = gogn;
         end
-     %catch me         
+     catch me         
          disp('error');
-        % ef hingad er komid er Mappa(i).name ekki gilt skraar nafn. Geri
-        % tetta tvi i minum prufum var vesen med nofnin
-    %end
+        % ef hingad er komid er Mappa(i).name ekki gilt skraar nafn
+    end
 end
 
+% les inn allt fyrir fluguna
+
+mappa = strcat(pwd,'\Fluga\');
+a = dir(strcat(mappa, '*.dat'));
+
+for i = 1:length(a)
+    gogn = importdata(strcat(mappa,char(a(i).name)));
+    GognFluga{i} = gogn;
+end
+%GognFluga{1}.data(:,1)
+
+% % Hernar er teiknad upp ferlarnir fyrir fluguna
+% for i = 1:length(a)
+%     figure
+%     plot(GognFluga{i}.data(:,1),GognFluga{i}.data(:,2),'k','Linewidth',2);
+% end
+
+
+
+% Greina ferla
 
 
 
