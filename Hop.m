@@ -44,16 +44,16 @@ for i = 1:length(a)
 end
 %GognFluga{1}.data(:,1)
 
-% % Hernar er teiknad upp ferlarnir fyrir fluguna
-% for i = 1:length(a)
-%     figure
-%     plot(GognFluga{i}.data(:,1),GognFluga{i}.data(:,2),'k','Linewidth',2);
-% end
-% 
-% for i = 1:length(GognMann)
-%     figure
-%     plot(GognMann{i}(:,2),GognMann{i}(:,3))
-% end
+% Hernar er teiknad upp ferlarnir fyrir fluguna
+for i = 1:length(a)
+    figure
+    plot(GognFluga{i}.data(:,1),GognFluga{i}.data(:,2),'k','Linewidth',2);
+end
+
+for i = 1:length(GognMann)
+    figure
+    plot(GognMann{i}(:,2),GognMann{i}(:,3))
+end
 
 % Greina ferla
 
