@@ -1,7 +1,7 @@
 % Pall gudbrandsson og co
 % hopverkefni 2017
 
-%% damid
+%%
 close all
 clear all
 clc
@@ -14,12 +14,13 @@ mappa = strcat(pwd, '\Data\');
 Mappa= dir(mappa);
 Gogn = [];
 
-for i = 3:length(Mappa)
+for i = 1:length(Mappa)
     try
         % held tad turfi ekki ad hafa try catch en atla ekki ad taka strax
-        y{i} = dir(strcat(mappa,char(Mappa(i).name), '\*.dat'));
-        for a = 1:length(y{i}.name)
-            gogn = load(strcat(mappa,Mappa(i).name,'\',char(y{i}(a).name)));
+        y = dir(strcat(mappa,char(Mappa(i).name), '\*.dat'));
+        for a = 1:6
+            gogn = load(strcat(mappa,Mappa(i).name,'\',char(y(a).name)));
+            Gogn{end+1} = gogn;
         end
      catch me         
          disp('error');
