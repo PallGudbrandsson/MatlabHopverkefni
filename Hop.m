@@ -120,6 +120,8 @@ for i = 1:length(GognMann) % tarf ad endurbata tessa lykkju
     summaHlutL = 0;
     summa = 0;
 end
+
+%setja tetta upp i fprintf
 AA
 AAHlutL
 
@@ -146,10 +148,38 @@ for i = 1:length(type)
     On(i) = (on/summa)*100;
     Front(i) = (front/summa)*100;
 end
+% setja tetta upp i fprntf
 Behind
 On
 Front
 
+
+% teikna allt 
+% Tarf ad breyta tannig ad tad er ser figure fyrir hverja manneskju
+figure
+hold on
+for i = 1:length(GognFluga)
+    subplot(3,1,i)
+    plot(GognFluga{i}.data(:,1),GognFluga{i}.data(:,2), 'k', 'Linewidth',1)
+    hold on
+end
+for i = 1:length(type)
+    if type(i) == 'Erfidur'
+        subplot(3,1,2)
+        plot(GognMann{i}(:,2), GognMann{i}(:,3),'r','Linewidth',0.5)
+        title('Erfidur')
+        
+    elseif type(i)== 'Midlungs'
+        subplot(3,1,3)
+        plot(GognMann{i}(:,2), GognMann{i}(:,3),'b','Linewidth',0.5)
+        title('Midlungs')
+        
+    elseif type(i) == 'Lett'
+        subplot(3,1,1)
+        plot(GognMann{i}(:,2), GognMann{i}(:,3),'g','Linewidth',0.5)
+        title('Lett')
+    end
+end
 
 
 
