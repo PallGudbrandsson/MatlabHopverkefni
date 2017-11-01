@@ -13,6 +13,7 @@ clc
 
 Mappa = {};
 y = [];
+nofn = [];
 
 pwd = strcat(pwd, '\MatlabHopverkefni');
 mappa = strcat(pwd, '\Data\');
@@ -23,12 +24,14 @@ GognFluga = [];
 for i = 1:length(Mappa)
     try
         y = dir(strcat(mappa,char(Mappa(i).name), '\*.dat'));
+        nofn{i} = char(y(i).name);
         for a = 1:6
             gogn = load(strcat(mappa,Mappa(i).name,'\',char(y(a).name)));
             GognMann{end+1} = gogn;
         end
      catch me         
          disp('error');
+         disp(Mappa(i).name);
         % ef hingad er komid er Mappa(i).name ekki gilt skraar nafn
     end
 end
@@ -93,6 +96,7 @@ for i = 1:length(GognMann) % tarf ad endurbata tessa lykkju
         fluga = GognFluga{2}.data;% villa
     else
         disp('error')
+        pause
     end
     for a = 1:(length(GognMann{i})-1)
         % byrja a ad athuga hvern einasta punkt. Matti athuga med ad breyta
@@ -121,7 +125,7 @@ for i = 1:length(GognMann) % tarf ad endurbata tessa lykkju
     summa = 0;
 end
 
-%setja tetta upp i fprintf
+%setja tetta upp i fprintf og skipta tannig ad tad eru 6 stok per manneskju
 AA
 AAHlutL
 
@@ -148,7 +152,10 @@ for i = 1:length(type)
     On(i) = (on/summa)*100;
     Front(i) = (front/summa)*100;
 end
-% setja tetta upp i fprntf
+% setja tetta upp i fprintf
+% skipta upp tannig ad tad eru 6 stok fyrir hverja manneskju tar eg er ekki
+% buinn ad forrita tad tannig. Ef tad er ekki hagt ad skipta tannig upp
+% tarf ad breyta forritunninni
 Behind
 On
 Front
@@ -156,28 +163,31 @@ Front
 
 % teikna allt 
 % Tarf ad breyta tannig ad tad er ser figure fyrir hverja manneskju
-figure
-hold on
-for i = 1:length(GognFluga)
-    subplot(3,1,i)
-    plot(GognFluga{i}.data(:,1),GognFluga{i}.data(:,2), 'k', 'Linewidth',1)
+for c = 1:(length(type)/6)
+    nafn = strsplit(char(nofn(c+2)),'_');
+    figure('Name',char(nafn(1)), 'NumberTitle','off')
     hold on
-end
-for i = 1:length(type)
-    if type(i) == 'Erfidur'
-        subplot(3,1,2)
-        plot(GognMann{i}(:,2), GognMann{i}(:,3),'r','Linewidth',0.5)
-        title('Erfidur')
-        
-    elseif type(i)== 'Midlungs'
-        subplot(3,1,3)
-        plot(GognMann{i}(:,2), GognMann{i}(:,3),'b','Linewidth',0.5)
-        title('Midlungs')
-        
-    elseif type(i) == 'Lett'
-        subplot(3,1,1)
-        plot(GognMann{i}(:,2), GognMann{i}(:,3),'g','Linewidth',0.5)
-        title('Lett')
+    for i = 1:length(GognFluga)
+        subplot(3,1,i)
+        plot(GognFluga{i}.data(:,1),GognFluga{i}.data(:,2), 'k', 'Linewidth',1)
+        hold on
+    end
+    for i = 1:length(type)
+        if type(i) == 'Erfidur'
+            subplot(3,1,2)
+            plot(GognMann{i}(:,2), GognMann{i}(:,3),'r','Linewidth',0.5)
+            title('Erfidur')
+
+        elseif type(i)== 'Midlungs'
+            subplot(3,1,3)
+            plot(GognMann{i}(:,2), GognMann{i}(:,3),'b','Linewidth',0.5)
+            title('Midlungs')
+
+        elseif type(i) == 'Lett'
+            subplot(3,1,1)
+            plot(GognMann{i}(:,2), GognMann{i}(:,3),'g','Linewidth',0.5)
+            title('Lett')
+        end
     end
 end
 
