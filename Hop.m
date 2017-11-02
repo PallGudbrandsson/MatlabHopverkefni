@@ -14,7 +14,7 @@ clc
 Mappa = {};
 y = [];
 nofn = [];
-
+Nofn = [];
 pwd = strcat(pwd, '\MatlabHopverkefni');
 mappa = strcat(pwd, '\Data\');
 Mappa= dir(mappa);
@@ -22,7 +22,7 @@ GognMann = [];
 GognFluga = [];
 teljari = 1;
 
-for i = 1:length(Mappa)
+for i = 1:length(Mappa) % Herna eru oll gogn sem vid notum til ad lesa inn gogn em manneskjuna skref 1.1
     try
         y = dir(strcat(mappa,char(Mappa(i).name), '\*.dat'));
         nofn{i} = char(y(i).name);
@@ -37,21 +37,25 @@ for i = 1:length(Mappa)
     end
 end
 
-% geri fylki sem inniheldur nofn sjuklinga
 
-for i = 1:length(nofn)
+
+
+% geri fylki sem inniheldur nofn sjuklinga
+% skref 1.2 unnid meira med nofn einstaklinga. Innlesturinn sem vid erum ad
+% nota skilar 2 ogildum nofnum tannig vid verdum ad byrja a 3
+for i = 3:length(nofn)
     try
-        nafn = strsplit(char(nofn(i),'_'));
-        nofn(teljari) = char(nafn(1))
+        nafn = strsplit(char(nofn(i)),'_');
+        Nofn(teljari) = char(nafn(1))
         teljari = teljari + 1;
     catch me
-        
+        disp('fle')
     end
 end
         
 
-% les inn allt fyrir fluguna
 
+% herna les eg inn gognin um fluguna skref 1.3
 mappa = strcat(pwd,'\Fluga\');
 a = dir(strcat(mappa, '*.dat'));
 
@@ -76,7 +80,10 @@ end
 %     plot(GognMann{i}(:,2),GognMann{i}(:,3))
 % end
 
-% Greina ferla
+
+
+
+% Greina ferla skref 2
 
 type = strings(1,length(GognMann)); %ones(1,length(GognMann));
 
@@ -92,8 +99,12 @@ for i = 1:length(GognMann)
             disp('Tetta a ekki ad gerast')
     end
 end
-% Finna hvenar madur er fyrir aftan og hvenar fyrir framan og a sama tima
-% finna bilin
+
+
+% herna er eg ad finna hvor madurinn er a flugunni, fyrir aftan eda a henni
+% og prosenturnar a tvi
+% Skref 3
+
 stadur = strings(1679-1, length(GognMann));
 teljari = 1;
 summaHlutL = 0;
@@ -164,7 +175,8 @@ close
 
 %setja tetta upp i fprintf og skipta tannig ad tad eru 6 stok per manneskju
 
-% Hlutfall Behind the point, On the point. in Front of the point
+% Hlutfall Behind the point, On the point. in Front of the point 
+% Skref 4
 Behind = ones(1,length(type)); behind = 0;
 On = ones(1,length(type)); on = 0;
 Front = ones(1,length(type)); front = 0;
@@ -187,14 +199,8 @@ for i = 1:length(type)
     On(i) = (on/summa)*100;
     Front(i) = (front/summa)*100;
 end
-% setja tetta upp i fprintf
-% skipta upp tannig ad tad eru 6 stok fyrir hverja manneskju tar eg er ekki
-% buinn ad forrita tad tannig. Ef tad er ekki hagt ad skipta tannig upp
-% tarf ad breyta forritunninni
 
-
-% teikna allt 
-% Tarf ad breyta tannig ad tad er ser figure fyrir hverja manneskju
+% Skref 6. Prenta allt ut
 for c = 1:(length(type)/6)
     nafn = strsplit(char(nofn(c+2)),'_');
     figure('Name',char(nafn(1)), 'NumberTitle','off')
