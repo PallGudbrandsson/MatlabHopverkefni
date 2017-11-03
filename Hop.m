@@ -25,12 +25,12 @@ teljari = 1;
 for i = 1:length(Mappa) % Herna eru oll gogn sem vid notum til ad lesa inn gogn em manneskjuna skref 1.1
     try
         y = dir(strcat(mappa,char(Mappa(i).name), '\*.dat'));
-        nofn{i} = char(y(i).name);
+        nofn{i} = char(y(1).name);
         for a = 1:6
             gogn = load(strcat(mappa,Mappa(i).name,'\',char(y(a).name)));
             GognMann{end+1} = gogn;
         end
-     catch me         
+     catch me  
          disp('error');
          disp(Mappa(i).name);
         % ef hingad er komid er Mappa(i).name ekki gilt skraar nafn
@@ -46,10 +46,9 @@ end
 for i = 3:length(nofn)
     try
         nafn = strsplit(char(nofn(i)),'_');
-        Nofn(teljari) = char(nafn(1))
-        teljari = teljari + 1;
+        Nofn(i-2) = char(nafn(1))
     catch me
-        disp('fle')
+        disp('error')
     end
 end
         
@@ -110,7 +109,7 @@ teljari = 1;
 summaHlutL = 0;
 summa = 0;
 
-AAHlutL = zeros(length(GognMann),1); % hlutlaus Amplitude accuracy. Hliutlaus, alltaf lagt vid
+AAHlutL = ones(length(GognMann),1); % hlutlaus Amplitude accuracy. Hliutlaus, alltaf lagt vid
 AA = ones(length(GognMann),1);
     
 for i = 1:length(GognMann) % tarf ad endurbata tessa lykkju
@@ -135,7 +134,7 @@ for i = 1:length(GognMann) % tarf ad endurbata tessa lykkju
             % er a punktinum   
             % tar sem tetta fylki er F***ing Gigantiskt nota eg einfalda stafi til ad spara plass
             stadur(a,i) = 'O'; % On the point
-            summa = summa + bil;
+%             summa = summa + bil;
         elseif sqrt((GognMann{i}((a-1),2)-fluga((a-1),1))^2 + (GognMann{i}((a-1),3)-fluga((a-1),2))^2)>sqrt((GognMann{i}((a+1),2)-fluga((a+1),1))^2 + (GognMann{i}((a+1),3)-fluga((a+1),2))^2)
             % fyrir framan
             stadur(a,i) = 'F'; % in Front of
@@ -183,6 +182,7 @@ Front = ones(1,length(type)); front = 0;
 
 for i = 1:length(type)
     behind = 0; on = 0; front = 0;
+    %breyta tessari romsu og nota find
     for a = 1:length(stadur)
         if stadur(a,i) == 'O'
             on = on + 1;
@@ -200,6 +200,7 @@ for i = 1:length(type)
     Front(i) = (front/summa)*100;
 end
 
+clc
 % Skref 6. Prenta allt ut
 for c = 1:(length(type)/6)
     nafn = strsplit(char(nofn(c+2)),'_');
@@ -210,7 +211,8 @@ for c = 1:(length(type)/6)
         plot(GognFluga{i}.data(:,1),GognFluga{i}.data(:,2), 'k', 'Linewidth',1)
         hold on
     end
-    for i = 1:length(type)
+    for i = (c-1)*6+1:c*6
+        i
         if type(i) == 'Erfidur'
             subplot(3,1,2)
             plot(GognMann{i}(:,2), GognMann{i}(:,3),'r','Linewidth',0.5)
@@ -234,39 +236,3 @@ end
 % tarf ad skrifa ut badi AA
 % prosentur tar sem madurinn er fyrir aftan fluguna, a flugunni eda fyrir
 % framan
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
