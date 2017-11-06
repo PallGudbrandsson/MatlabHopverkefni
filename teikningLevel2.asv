@@ -1,0 +1,24 @@
+function teikningLevel2(gogn, hnit)
+    for i = 1:length(gogn)
+        len = length(gogn{i})
+        switch len
+            case 1679
+                % lett
+                subplot(3,1,1)
+                hold on
+                plot(gogn{i}(:,1)/1000,gogn{i}(:,hnit));
+            case 1364
+                % erfidur
+                subplot(3,1,2)
+                hold on
+                plot(gogn{i}(:,1)/1000,gogn{i}(:,hnit),'Linewidth',0.1);
+            case 1278
+                % mid
+                subplot(3,1,3)
+                hold on
+                plot(gogn{i}(:,1)/1000,gogn{i}(:,hnit),'Linewidth',0.1);
+            otherwise
+                disp('ERROR ERROR ERROR')
+        end
+    end 
+end

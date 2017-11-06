@@ -13,7 +13,6 @@ function [Bil, stada, AA, AAhlutl] = bilGreining(madurx,madury,flugax,flugay)
 
     for i = 2:length(flugay)-1
         bil = sqrt((madurx(i)-flugax(i))^2 + (madury(i)-flugay(i))^2);
-        Bil(i) = bil;
         if bil < 2
             stada(i) = 2;
             AA(i) = bil;

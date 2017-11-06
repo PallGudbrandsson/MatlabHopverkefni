@@ -56,10 +56,36 @@ tegundir{1} = greining(GognMann,lettur,'Lett');
 tegundir{3} = greining(GognMann,midlungs,'Midlungs');
 tegundir{2} = greining(GognMann,erfidur,'Erfidur');
 
+%sortera tegundir
+Tegund = ones(1,(length(tegundir{1})+length(tegundir{2})+length(tegundir{2})));
+teljari1 = 1; teljari2 = 1; teljari3 = 1;
+for i = 1:length(Tegund)
+    if tegundir{1}(teljari1) == i
+        Tegund(i) = 1;
+        if teljari1 ~= 30
+            teljari1 = teljari1 + 1;
+        end
+    elseif tegundir{2}(teljari2) == i
+        Tegund(i) = 2;
+        if teljari2 ~= 30
+            teljari2 = teljari2 + 1;
+        end
+    elseif tegundir{3}(teljari3) == i
+        Tegund(i) = 3;
+        if teljari ~= 30
+            teljari3 = teljari3 + 1;
+        end
+    else
+        disp('ERROR ERROR ERROR')
+    end
+end
+% flokka tegundir; 1=lettur, 2=midlungs, 3=erfidur
+
+
+
+
 
 % Greina stadsetningu og skrifa upp
-
-
 AA = []; aa = 0;
 AAhlutL = []; aah = 0;
 Bil = []; bil = 0;
@@ -100,66 +126,63 @@ for i = 1:length(Stada)
     [framan(i),a(i),aftan(i)] = stadsetning(Stada{i});
 end
 
-pause
-
-%skref 5
-teljari = 1;
-
-for i = 1:length(type)
-    teikna = zeros(length(Bil)-1,1);
-    for a = 1:length(Bil)
-        if stadur(a,i) == 'O'
-            teikna(a) = 0;
-        elseif stadur(a,i) == 'F'
-            teikna(a) = Bil(a,i);
-        else
-            teikna(a) = -Bil(a,i);
-        end
-    end
-    
-    subplot(6,1,teljari)
-    title('AA')
-    plot(teikna,'g')
-    if teljari == 6
-        teljari = 1;
-        figure
-    else
-        teljari = teljari + 1;
+% teikna lengd per timaskref
+teikna1 = 0; teikna2 = 0; teikna3 = 0;
+for i = 1:length(Vegalengd)
+    switch Tegund(i)
+        case 1
+            % lettur
+            teikna1(end+1) = Vegalengd(i);
+        case 2
+            % erfidur
+            teikna3(end+1) = Vegalengd(i);
+        case 3
+            % midlungs
+            teikna2(end+1) = Vegalengd(i);
+        otherwise
+            disp('ERROR ERROR ERROR');
     end
 end
-close
+teikna1(1) = []; teikna2(1) = []; teikna3(1) = [];
 
-% Skref 6. Prenta allt ut
-for c = 1:(length(type)/6)
-    nafn = strsplit(char(nofn(c+2)),'_');
-    figure('Name',char(nafn(1)), 'NumberTitle','off')
-    hold on
-    for i = 1:length(GognFluga)
-        subplot(3,1,i)
-        plot(GognFluga{i}.data(:,1),GognFluga{i}.data(:,2), 'k', 'Linewidth',1)
-        hold on
-    end
-    for i = (c-1)*6+1:c*6
-        if type(i) == 'Erfidur'
-            subplot(3,1,2)
-            plot(GognMann{i}(:,2), GognMann{i}(:,3),'r','Linewidth',0.5)
-            title('Erfidur')
+figure('Name','Lengd per timaskref','NumberTitle','off')
+subplot(3,1,1)
+stem(teikna1)
+title('Lett')
+subplot(3,1,2)
+stem(teikna3)
+title('Erfidur')
+subplot(3,1,3)
+stem(teikna2)
+title('Midlungs')
 
-        elseif type(i)== 'Midlungs'
-            subplot(3,1,3)
-            plot(GognMann{i}(:,2), GognMann{i}(:,3),'b','Linewidth',0.5)
-            title('Midlungs')
+% Teikna upp AA
 
-        elseif type(i) == 'Lett'
-            subplot(3,1,1)
-            plot(GognMann{i}(:,2), GognMann{i}(:,3),'g','Linewidth',0.5)
-            title('Lett')
-        end
-    end
-end
 
-%herna kemur oll utskrift. Seinna skal gera fall inni for loopu sem gerir
-%ser vesen fyrir hverja manneskju
-% tarf ad skrifa ut badi AA
-% prosentur tar sem madurinn er fyrir aftan fluguna, a flugunni eda fyrir
-% framan
+
+% Lidur 8
+% tegundir geymir index ferla sem eru; 1 audveldir, 2 erfidir, 3 midlungs
+
+    % lidur 8 x hnit
+    figure('Name','X-hnit','NumberTitle','off')
+    teikningLevel2(GognMann,2);
+
+    % teikna fluguna
+    subplot(3,1,1)
+    plot(GognMann{tegundir{1}(1)}(:,1)/1000,GognFluga{1}.data(:,1),'k','Linewidth',2)
+    subplot(3,1,3)
+    plot(GognMann{tegundir{2}(1)}(:,1)/1000,GognFluga{2}.data(:,1),'k','Linewidth',2)
+    subplot(3,1,2)
+    plot(GognMann{tegundir{3}(1)}(:,1)/1000,GognFluga{3}.data(:,1),'k','Linewidth',2)
+
+    % lidur 8 y hnit
+    figure('Name','Y-hnit','NumberTitle','off')
+    teikningLevel2(GognMann,3);
+
+    % teikna fluguna
+    subplot(3,1,1)
+    plot(GognMann{tegundir{1}(1)}(:,1)/1000,GognFluga{1}.data(:,2),'k','Linewidth',2)
+    subplot(3,1,3)
+    plot(GognMann{tegundir{2}(1)}(:,1)/1000,GognFluga{2}.data(:,2),'k','Linewidth',2)
+    subplot(3,1,2)
+    plot(GognMann{tegundir{3}(1)}(:,1)/1000,GognFluga{3}.data(:,2),'k','Linewidth',2)
