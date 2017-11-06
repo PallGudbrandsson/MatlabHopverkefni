@@ -63,7 +63,7 @@ tegundir{2} = greining(GognMann,erfidur,'Erfidur');
 AA = []; aa = 0;
 AAhlutL = []; aah = 0;
 Bil = []; bil = 0;
-Vegalengd = ones(1,length(GognMann));
+Vegalengd = [];
 Stada = []; stada = 0;
 
 
@@ -83,24 +83,39 @@ for i = 1:length(GognMann)
             disp('tetta a ekki ad gerast');
     end
     [bil, stada, aa, aah]=bilGreining(GognMann{i}(:,2),GognMann{i}(:,3),flugax,flugay);
-    Vegalengd(i) = sum(bilGreining2(GognMann{i}(:,2),GognMann{i}(:,3)));
+    Vegalengd{i} = bilGreining2(GognMann{i}(:,2),GognMann{i}(:,3));
     Bil{i} = bil;
     Stada{i} = stada;
     AA{i} = aa;
     AAhlutL{i} = aah;
 end
+
 hreyfing = [];
 
 %skref 6
-framan = zeros(1,length(GognMann));
-a = zeros(1,length(GognMann));
-aftan = zeros(1,length(GognMann));
+Behind = ones(1,length(type)); behind = 0;
+On = ones(1,length(type)); on = 0;
+Front = ones(1,length(type)); front = 0;
 
-for i = 1:length(Stada)
-    [framan(i),a(i),aftan(i)] = stadsetning(Stada{i});
+for i = 1:length(GognMann)
+    behind = 0; on = 0; front = 0;
+    %breyta tessari romsu og nota find
+    for a = 1:length(stadur)
+        if stadur(a,i) == 'O'
+            on = on + 1;
+        elseif stadur(a,i) == 'F'
+            front = front + 1;
+        elseif stadur(a,i) == 'B'
+            behind = behind + 1;
+        else
+            %ekkert gildi(ferill buinn)
+        end
+    end
+    summa = on + front + behind;
+    Behind(i) = (behind/summa)*100;
+    On(i) = (on/summa)*100;
+    Front(i) = (front/summa)*100;
 end
-
-pause
 
 %skref 5
 teljari = 1;
