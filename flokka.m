@@ -1,8 +1,14 @@
 function [teikna1,teikna2,teikna3] = flokka(gogn,tegund)
 % flokka gogn sem eru gefin i 3 flokka eftir gerd
 teikna1 = 0; teikna2 = 0; teikna3 = 0;
-for i = 1:length(tegund)
-    switch tegund(i)
+for i = 1:length(gogn)
+    try
+        teg = tegund(i);
+    catch me
+         teg = tegund;
+    end
+    
+    switch teg
         case 1
             % lettur
             teikna1(end+1) = gogn(i);

@@ -12,9 +12,6 @@ clear all
 clc
 
 Mappa = {};
-y = [];
-nofn = [];
-Nofn = [];
 pwd = strcat(pwd, '\MatlabHopverkefni');
 mappa = strcat(pwd, '\Data\');
 Mappa= dir(mappa);
@@ -22,6 +19,7 @@ GognMann = [];
 GognFluga = [];
 gogn = [];
 teljari = 1;
+
 
 for i = 1:length(Mappa) % Herna eru oll gogn sem vid notum til ad lesa inn gogn em manneskjuna skref 1.1
     try
@@ -109,8 +107,8 @@ for i = 1:length(GognMann)
             disp('tetta a ekki ad gerast');
     end
     [bil, stada, aa, aah]=bilGreining(GognMann{i}(:,2),GognMann{i}(:,3),flugax,flugay);
-    Vegalengd(i) = sum(bilGreining2(GognMann{i}(:,2),GognMann{i}(:,3)));
-    Bil{i} = bil;
+    Bil{i} = bilGreining2(GognMann{i}(:,2),GognMann{i}(:,3));
+    Vegalengd(i) = sum(Bil{i});
     Stada{i} = stada;
     AA{i} = aa;
     AAhlutL{i} = aah;
@@ -147,6 +145,17 @@ teikningLevel1(1:length(teikna2),teikna2,2,'Ferill','Lengd')
 teikningLevel1(1:length(teikna3),teikna3,3,'Ferill','Lengd')
 
 % lengd per timaskref
+% keyrslu timinn a tessu er rugl ef allir ferlar eru teiknadir
+figure('Name','Faersla per timaskref', 'Numbertitle','off')
+for i = 1:length(Bil) % er ogedslega ljott ad skrifa ut alla, matti faekka
+    [teikna1, teikna2,teikna3] = flokka(Bil{i},Tegund(i));
+    teikningLevel1(1:length(teikna1),teikna1,1,'Timi','Faersla')
+    axis([0 length(GognMann{tegundir{1}(1)}) 0 4])
+    teikningLevel1(1:length(teikna2),teikna2,2,'Timi','Faersla')
+    axis([0 length(GognMann{tegundir{3}(1)}) 0 5])
+    teikningLevel1(1:length(teikna3),teikna3,3,'Timi','Faersla')
+    axis([0 length(GognMann{tegundir{2}(1)}) 0 5])
+end
 
 
 % Teikna upp AA
@@ -155,18 +164,104 @@ for i = 1:length(AA)
     teikningLevel1(1:length(AA{i}),AA{i},Tegund(i),'Timaskref','AA')
 end
 
+
 % Teikna upp prosentur
-buid1 = []; buid2 = []; buid3 = [];
+buid1 = ones(1,30); buid2 = ones(1,30); buid3 = ones(1,30);
 figure('Name','Stadsetning','NumberTitle','off')
 [teikna1, teikna2, teikna3] = flokka(aftan,Tegund);
-teikningLevel1(1:length(teikna1),teikna1,1,'Ferill','Prosenta')
-teikningLevel1(1:length(teikna2),teikna2,2,'Ferill','Prosenta')
-teikningLevel1(1:length(teikna3),teikna3,3,'Ferill','Prosenta')
 
-buid1 = buid1 + teikna1;
-buid2 = buid2 + teikna2;
-buid3 = buid3 + teikna3;
-% pause
+for i = 1:length(teikna1)
+    buid1(i) = buid1(i) + teikna1(i);
+    buid2(i) = buid2(i) + teikna2(i);
+    buid3(i) = buid3(i) + teikna3(i);
+end
+
+teikningLevel1(1:length(buid1),buid1,1,'Ferill','Prosenta')
+teikningLevel1(1:length(buid3),buid2,2,'Ferill','Prosenta')
+teikningLevel1(1:length(buid2),buid3,3,'Ferill','Prosenta')
+
+[teikna1, teikna2, teikna3] = flokka(a,Tegund);
+for i = 1:length(teikna1)
+    buid1(i) = buid1(i) + teikna1(i);
+    buid2(i) = buid2(i) + teikna2(i);
+    buid3(i) = buid3(i) + teikna3(i);
+end
+teikningLevel1(1:length(buid1),buid1,1,'Ferill','Prosenta')
+teikningLevel1(1:length(buid3),buid2,2,'Ferill','Prosenta')
+teikningLevel1(1:length(buid2),buid3,3,'Ferill','Prosenta')
+[teikna1, teikna2, teikna3] = flokka(framan,Tegund);
+for i = 1:length(teikna1)
+    buid1(i) = buid1(i) + teikna1(i);
+    buid2(i) = buid2(i) + teikna2(i);
+    buid3(i) = buid3(i) + teikna3(i);
+end
+teikningLevel1(1:length(buid1),buid1,1,'Ferill','Prosenta')
+ylim([0 101]);
+legend('aftan','a + aftan','framan + a + aftan','Location','best')
+teikningLevel1(1:length(buid3),buid2,2,'Ferill','Prosenta')
+ylim([0 101]);
+legend('aftan','a + aftan','framan + a + aftan','Location','best')
+teikningLevel1(1:length(buid2),buid3,3,'Ferill','Prosenta')
+ylim([0 101]);
+legend('aftan','a + aftan','framan + a + aftan','Location','best')
+
+% Lidur 7 smoothness
+xe=0;
+xm=0;
+xd=0;
+Je = ones(1,30);
+Jm = ones(1,30);
+Jd = ones(1,30);
+for i = 1:length(GognMann)
+    if length(GognMann{i})==1679
+        xe=xe+1;
+        Je(xe)=smooth(GognMann{i}(:,2),GognMann{i}(:,3),GognMann{i}(:,1));
+        if xe==1
+            XF=GognFluga{1}.data(:,1);
+            YF=GognFluga{1}.data(:,2);
+            tf=cumsum(GognFluga{1}.data(:,3));
+            JFe=smooth(XF,YF,tf);
+        end
+        Je(xe)=Je(xe)/JFe;
+    elseif length(GognMann{i})==1364
+        xm=xm+1;
+        Jm(xm)=smooth(GognMann{i}(:,2),GognMann{i}(:,3),GognMann{i}(:,1));
+        if xm==1
+            XF=GognFluga{3}.data(:,1);
+            YF=GognFluga{3}.data(:,2);
+            tf=cumsum(GognFluga{3}.data(:,3));
+            JFm=smooth(XF,YF,tf);
+        end
+        Jm(xm)=Jm(xm)/JFm;
+    else
+        xd=xd+1;
+        Jd(xd)=smooth(GognMann{i}(:,2),GognMann{i}(:,3),GognMann{i}(:,1));
+        if xd==1
+            XF=GognFluga{2}.data(:,1);
+            YF=GognFluga{2}.data(:,2);
+            tf=cumsum(GognFluga{2}.data(:,3));
+            JFd=smooth(XF,YF,tf);
+        end
+        Jd(xd)=Jd(xd)/JFd;
+    end
+end
+figure('Name','Smoothness','NumberTitle','off')
+subplot(3,1,1)
+plot(Je,'r')
+title('Easy')
+hold on
+
+subplot(3,1,2)
+plot(Jm,'r')
+title('Medium')
+hold on
+
+subplot(3,1,3)
+plot(Jd,'r')
+title('Hard')
+hold on
+
+
 
 % Lidur 8
 % tegundir geymir index ferla sem eru; 1 audveldir, 2 erfidir, 3 midlungs

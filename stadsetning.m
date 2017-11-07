@@ -1,7 +1,8 @@
 function [framan,a,aftan] = stadsetning(stadsetning)
-% tekur inn stadsetninguna a formatinu sem vid erum ad nota. Notum tolur
-% tar sem tar taka minna vinnsluminni heldur en strengir og ta verdur
-% forritid okkar fljotara ad keyra
+% tekur inn stadsetninguna a formatinu sem vid erum ad nota. 
+% 0= oskilgreint, 1= fyrir aftan flugu, 2= a flugu, 3= fyrir framan flugu
+% Notum tolur tar sem tar taka minna vinnsluminni heldur en strengir og 
+% ta verdur forritid okkar fljotara ad keyra
     framan = 0; a = 0; aftan = 0; summa = 0;
     for i = 1:length(stadsetning)
         if stadsetning(i) == 1
