@@ -115,7 +115,18 @@ for i = 1:length(GognMann)
     AA{i} = aa;
     AAhlutL{i} = aah;
 end
-hreyfing = [];
+
+% tek ut null stokin i AA
+for i = 1:length(AA)
+    teljari = 0;
+    for a = length(AA{i}):-1:1
+        if AA{i}(a) ~= 0
+            break
+        else
+            AA{i}(a) = [];
+        end
+    end
+end
 
 %skref 6
 framan = zeros(1,length(GognMann));
@@ -128,37 +139,34 @@ end
 
 % teikna lengd per timaskref
 teikna1 = 0; teikna2 = 0; teikna3 = 0;
-for i = 1:length(Vegalengd)
-    switch Tegund(i)
-        case 1
-            % lettur
-            teikna1(end+1) = Vegalengd(i);
-        case 2
-            % erfidur
-            teikna3(end+1) = Vegalengd(i);
-        case 3
-            % midlungs
-            teikna2(end+1) = Vegalengd(i);
-        otherwise
-            disp('ERROR ERROR ERROR');
-    end
-end
-teikna1(1) = []; teikna2(1) = []; teikna3(1) = [];
+[teikna1,teikna2,teikna3] = flokka(Vegalengd,Tegund);
 
-figure('Name','Lengd per timaskref','NumberTitle','off')
-subplot(3,1,1)
-stem(teikna1)
-title('Lett')
-subplot(3,1,2)
-stem(teikna3)
-title('Erfidur')
-subplot(3,1,3)
-stem(teikna2)
-title('Midlungs')
+figure('Name','Lengd ferla','NumberTitle','off')
+teikningLevel1(1:length(teikna1),teikna1,1,'Ferill','Lengd')
+teikningLevel1(1:length(teikna2),teikna2,2,'Ferill','Lengd')
+teikningLevel1(1:length(teikna3),teikna3,3,'Ferill','Lengd')
+
+% lengd per timaskref
+
 
 % Teikna upp AA
+figure('Name','AA','NumberTitle','off')
+for i = 1:length(AA)
+    teikningLevel1(1:length(AA{i}),AA{i},Tegund(i),'Timaskref','AA')
+end
 
+% Teikna upp prosentur
+buid1 = []; buid2 = []; buid3 = [];
+figure('Name','Stadsetning','NumberTitle','off')
+[teikna1, teikna2, teikna3] = flokka(aftan,Tegund);
+teikningLevel1(1:length(teikna1),teikna1,1,'Ferill','Prosenta')
+teikningLevel1(1:length(teikna2),teikna2,2,'Ferill','Prosenta')
+teikningLevel1(1:length(teikna3),teikna3,3,'Ferill','Prosenta')
 
+buid1 = buid1 + teikna1;
+buid2 = buid2 + teikna2;
+buid3 = buid3 + teikna3;
+% pause
 
 % Lidur 8
 % tegundir geymir index ferla sem eru; 1 audveldir, 2 erfidir, 3 midlungs
@@ -168,21 +176,15 @@ title('Midlungs')
     teikningLevel2(GognMann,2);
 
     % teikna fluguna
-    subplot(3,1,1)
-    plot(GognMann{tegundir{1}(1)}(:,1)/1000,GognFluga{1}.data(:,1),'k','Linewidth',2)
-    subplot(3,1,3)
-    plot(GognMann{tegundir{2}(1)}(:,1)/1000,GognFluga{2}.data(:,1),'k','Linewidth',2)
-    subplot(3,1,2)
-    plot(GognMann{tegundir{3}(1)}(:,1)/1000,GognFluga{3}.data(:,1),'k','Linewidth',2)
+    teikningLevel1(GognMann{tegundir{1}(1)}(:,1)/1000,GognFluga{1}.data(:,1),1, 'Timi','X hnit')
+    teikningLevel1(GognMann{tegundir{2}(1)}(:,1)/1000,GognFluga{2}.data(:,1),2, 'Timi','X hnit')
+    teikningLevel1(GognMann{tegundir{3}(1)}(:,1)/1000,GognFluga{3}.data(:,1),3, 'Timi','X hnit')
 
     % lidur 8 y hnit
     figure('Name','Y-hnit','NumberTitle','off')
     teikningLevel2(GognMann,3);
 
     % teikna fluguna
-    subplot(3,1,1)
-    plot(GognMann{tegundir{1}(1)}(:,1)/1000,GognFluga{1}.data(:,2),'k','Linewidth',2)
-    subplot(3,1,3)
-    plot(GognMann{tegundir{2}(1)}(:,1)/1000,GognFluga{2}.data(:,2),'k','Linewidth',2)
-    subplot(3,1,2)
-    plot(GognMann{tegundir{3}(1)}(:,1)/1000,GognFluga{3}.data(:,2),'k','Linewidth',2)
+    teikningLevel1(GognMann{tegundir{1}(1)}(:,1)/1000,GognFluga{1}.data(:,2),1, 'Timi','Y hnit')
+    teikningLevel1(GognMann{tegundir{2}(1)}(:,1)/1000,GognFluga{2}.data(:,2),2, 'Timi','Y hnit')
+    teikningLevel1(GognMann{tegundir{3}(1)}(:,1)/1000,GognFluga{3}.data(:,2),3, 'Timi','Y hnit')
